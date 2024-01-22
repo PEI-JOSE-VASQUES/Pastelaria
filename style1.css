@@ -1,0 +1,316 @@
+@font-face {
+    font-family: 'ti';
+    src: url(RubikDoodleShadow-Regular.ttf);
+}
+@font-face {
+    font-family: 'lis';
+    src: url(BebasNeue-Regular.ttf);
+}
+body{
+height:auto;
+position: relative;
+z-index: 2;
+background: linear-gradient(to left top, blue,orange);
+background: url("rzr.jpg");
+background-size: 45% 45%;
+}
+
+
+
+
+
+#subtit{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#tarefa1{
+    width: 100%;
+    height:150px;
+    border: 0px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background: linear-gradient(to right top, rgb(255, 255, 255), orangered, rgb(255, 255, 255));
+    margin-bottom: 20px;
+    border-radius: 10px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    }
+    #titulo{
+    font-family: 'ti';
+    color: rgb(7, 51, 53);
+    font-size: 40pt;
+    background: yellow;
+    border-radius: 20px;
+    padding: 7px;
+    }
+    #botãoajuda{
+    font-family: 'ti';
+    color: rgb(7, 51, 53);
+    font-size: 20pt;
+    background: linear-gradient(to right top, rgb(183, 16, 189), rgb(144, 106, 204), rgb(255, 255, 255));
+    border-radius: 20px;
+    padding: 7px;
+    margin: 0px;
+
+    transition: all 0.5s;
+    }
+    #botãocontato{
+        font-family: 'ti';
+        color: rgb(7, 51, 53);
+        font-size: 20pt;
+        background: linear-gradient(to right top, rgb(183, 16, 189), rgb(144, 106, 204), rgb(255, 255, 255));
+        border-radius: 20px;
+        padding: 7px;
+        margin: 0px;
+        ;
+
+        transition: all 0.5s;
+        }
+        #jot{
+            display:flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #botãosobre{
+            font-family: 'ti';
+            color: rgb(7, 51, 53);
+            font-size: 20pt;
+            margin: -10px;
+            background: linear-gradient(to right top, rgb(183, 16, 189), rgb(144, 106, 204), rgb(255, 255, 255));
+            border-radius: 20px;
+            padding: 7px;
+            transition: all 0.5s;
+            margin: 0px;
+
+            }
+    #botãoVoltar:hover{
+    border: 3px rgb(143, 18, 59) solid;
+    }
+    
+    #gif{
+    width:200px;
+    height:95%;
+    border-radius: 15px;
+    }
+    #logo{
+    width:170px;
+    height:140px;
+    }
+
+
+
+
+
+
+
+
+
+
+#cantoimg{
+position: absolute;
+margin-top: 0;
+margin-left: 0;
+z-index: 1;
+width:300px ;
+height: 400px;
+}
+
+#um{
+width: 100%;
+background: rgba(1, 1, 1, 0.9);
+display: flex;
+margin-bottom: 10px;
+border-radius:19px ;
+flex-direction: column;
+align-items: center;
+}
+#mg1{
+width:180px;
+height: 150px;
+}
+#pastelLanches{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.titu{
+z-index: 9;
+border-radius: 20px;
+font-family: 'ti','sans-serif';
+font-size: 40pt;
+font-weight: 900; 
+background-color: rgb(255, 180, 4);
+padding: 10px;
+margin-top:0;
+}
+#arlist{
+width: 100%;
+height:auto;
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+}
+.list{
+    border: 5px yellow solid;
+z-index: 10;
+color: orangered;
+background-color: rgba(1, 1, 1, 0.768);
+width: 400px;
+height:510px;
+border-radius: 30px;
+}
+.list2{
+    border: 5px yellow solid;
+margin-left: 80px;
+    margin-top: 50px;
+    z-index: 10;
+    color: orangered;
+    background-color: rgba(1, 1, 1, 0.5);
+    width: 400px;
+    height:510px;
+    border-radius: 30px;
+    }
+.spesquerdo{
+padding-left: 130px;
+font-size: 15pt;
+font-family: 'lis','sans-serif';
+margin-top: 0px;
+margin-bottom: 0px;
+padding-top: 0px;
+padding-bottom: 0px;
+}
+.spdireito{
+    padding-left: 250px;
+    font-size: 10pt;
+    font-family: 'lis','sans-serif';
+    margin-top: 0px;
+    margin-bottom: 0px;
+    }
+.palaesquerda{
+    
+    font-family: 'lis','sans-serif';
+    padding-left: 12px;
+    font-size: 15pt;
+    padding-top:5px;
+}
+.paladireita{
+    font-family: 'lis','sans-serif';
+    padding-left: 12px;
+    font-size: pt;
+    white-space: nowrap;
+}
+.itemsSuperior{
+font-size: 10px;
+padding-left: 10px ;
+padding-top:-30px;
+color: rgb(208, 208, 52);
+}
+#footer{
+    z-index: 20;
+width:100%;
+background: linear-gradient(to right top, rgba(255, 255, 255, 0.727), rgba(255, 255, 255, 0.472));
+height:100px;
+border: 5px yellow solid;
+padding-top: 5px;   
+border-radius: 20px;
+margin-top: 30px;
+}
+#cantoimg2{
+    margin-bottom:-137px ;
+    margin-left: 80%;
+        width:250px ;
+        height: 300px;
+        }
+.redesSociaisface{
+color:rgb(214, 24, 59);
+margin-left: 10px;
+padding:0px;
+margin-top:20px;
+}
+.redesSociaisinta{
+    color:rgb(214, 24, 59);
+    margin-left: 10px;
+    padding:0px;
+    margin-top:5;
+    }
+    #centra1{
+        margin-left: 10px;
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+width: auto;
+padding: 0;
+color:blueviolet;
+height: 50%;
+}
+#centra2{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+    padding: 0;
+    color:blueviolet;
+    height: 50%;
+    }
+#imgRedeSocial1{
+width: 40px;
+height:40px;
+border-radius: 7px;
+}
+#imgRedeSocial2{
+    width: 40px;
+    height:40px;
+
+    }
+.imgda1{
+width: 350px;
+height: 350px;
+    transform: rotate(15deg);
+margin-top: 60px;
+border-radius: 50px;
+border: 5px rgb(1, 1, 1) solid;
+
+    }
+    .imgda2{
+        margin-top: -170px;
+margin-left: 130px;
+border-radius: 50px;
+        width: 250px;
+        height: 250px;
+transform: rotate(17deg);
+        border: 5px rgb(1, 1, 1) solid;
+            }
+            #pic{
+                width: 500px;
+                height:510px;
+                margin-left: 110px;
+                margin-top: 10px;
+            }
+
+
+
+
+            .dec{
+    text-decoration: none; color:orangered;
+transition: color 0.5s;
+margin-top: 0px;
+margin-bottom: 0px;
+padding: 0px;
+}
+.dec:hover{
+    color:rgb(249, 151, 129);
+    text-decoration:  underline;
+    cursor:pointer;
+}

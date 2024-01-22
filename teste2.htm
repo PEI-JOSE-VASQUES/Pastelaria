@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracer Rota no Mapa</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <label for="startPoint">Coordenada Inicial:</label>
+    <input type="text" id="startPoint" placeholder="Insira a coordenada inicial">
+
+    <label for="endPoint">Coordenada Final:</label>
+    <input type="text" id="endPoint" placeholder="Insira a coordenada final">
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script>
+        let map;
+        let routingControl;
+
+        function initMap() {
+            const startPoint = [-23.550520, -46.633308]; // Exemplo: São Paulo, Brasil
+            map = L.map('map').setView(startPoint, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Adiciona a rota inicial
+            traceRoute();
+        }
+
+        function traceRoute() {
+            const startPointInput = document.getElementById('startPoint');
+            const endPointInput = document.getElementById('endPoint');
+
+            const startCoords = startPointInput.value.split(',').map(coord => parseFloat(coord.trim()));
+            const endCoords = endPointInput.value.split(',').map(coord => parseFloat(coord.trim()));
+
+            // Remove a rota existente, se houver
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            // Adiciona a nova rota
+            routingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(startCoords[0], startCoords[1]),
+                    L.latLng(endCoords[0], endCoords[1])
+                ],
+            }).addTo(map);
+        }
+
+        // Adiciona eventos de mudança nos campos de entrada para acionar a função traceRoute
+        document.getElementById('startPoint').addEventListener('change', traceRoute);
+        document.getElementById('endPoint').addEventListener('change', traceRoute);
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

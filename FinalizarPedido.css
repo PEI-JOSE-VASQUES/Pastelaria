@@ -1,0 +1,71 @@
+@font-face {
+    font-family: 'ti';
+    src: url(RubikDoodleShadow-Regular.ttf);
+}
+@font-face {
+    font-family: 'lis';
+    src: url(BebasNeue-Regular.ttf);
+}
+@font-face {
+    font-family: 'lob';
+    src: url(Lobster-Regular.ttf);
+}
+body{
+background: url("bg.jpg");    }
+#corpotitulo{
+background: rgb(47, 67, 223);
+height: 120px;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+border-radius: 6px;
+}
+.corpo{
+    background: rgba(0, 0, 0, 0);
+    height: 720px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 10px;
+    }
+.bloco1{
+height: 1150PX;
+width: 590px;
+border-radius: 15px;
+background-color: rgb(119, 0, 255);
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+}
+.bloco2{
+    height: 720PX;
+    width: 590px;
+    border-radius: 15px;
+    background-color: rgb(119, 0, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    }
+.pgdbp{
+width: 90%;
+background: linear-gradient(to left top, yellow, green );
+background: rgb(144, 138, 138);
+margin-top: 10px;
+border-radius: 10px;
+display: flex;
+border: 1px black solid;
+flex-direction: row;
+align-items: flex-start;
+overflow: hidden;
+}
+#botsub{ width: 115px; transition: background 2s, color 1s, width 1s;  border-radius: 5px; border: 1px black solid;
+}
+#botsub:hover{
+    background: rgb(77, 72, 72);
+    width: 120px;
+    border: 2px black solid;
+    color:white;
+    }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter Coordenadas do Usuário</title>
+</head>
+
+<body>
+
+    <h1>Obter Coordenadas do Usuário</h1>
+
+    <button onclick="getLocation()">Obter Coordenadas</button>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                }, function (error) {
+                    alert("Erro ao obter a localização: " + error.message);
+                });
+            } else {
+                alert("Geolocalização não é suportada por este navegador.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Pagamento</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 600px;
+        }
+
+        .button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Esconde o ícone padrão da Leaflet e remove a sombra */
+        .leaflet-marker-icon-default,
+        .leaflet-marker-icon {
+            display: none !important;
+        }
+
+        /* Define uma classe específica para os marcadores personalizados */
+        .custom-marker-icon {
+            width: 30px;
+            height: 30px;
+            display: block !important; /* Garante que a imagem seja exibida */
+        }
+
+        /* Remove a sombra específica associada aos marcadores */
+        .leaflet-shadow-pane {
+            display: none !important;
+        }
+
+        /* Esconde a caixa de instruções de rota */
+        .leaflet-routing-container,
+        .leaflet-routing-container-hide {
+            display: none !important;
+        }
+
+        /* Estilos para os botões */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        /* Estilos para os rótulos */
+        .label {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Estilos para a div de informações de distância */
+        #distance-info {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-database.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+</head>
+
+<body>
+
+    <h1>Minha Página de Pagamento</h1>
+
+    <button onclick="openModal()">Ir para a área de pagamento</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div id="map"></div>
+
+            <div class="button-container">
+                <button onclick="locateCompany()">Localização da Empresa</button>
+                <button onclick="locateClient()">Localização do Cliente</button>
+            </div>
+
+            <!-- Elemento para exibir a distância do percurso -->
+            <div id="distance-info"></div>
+
+            <script>
+                var firebaseConfig = {
+                    databaseURL: "https://pastelaria-3b4de-default-rtdb.firebaseio.com/",
+                    apiKey: "AIzaSyCWyGbRlDZkbTzvmRqSeFJ7AzZumbV_Uko",
+                    authDomain: "pastelaria-3b4de.firebaseapp.com",
+                    projectId: "pastelaria-3b4de",
+                    storageBucket: "pastelaria-3b4de.appspot.com",
+                    messagingSenderId: "162634624762",
+                    appId: "1:162634624762:web:fb7b30e70c272663692343",
+                    measurementId: "G-67554V847G"
+                };
+
+                firebase.initializeApp(firebaseConfig);
+
+                var mestreRef = firebase.database().ref('mestre');
+                let dados1Value = 0, dados2Value = 0;
+
+                function fetchDataFromFirebase() {
+                    mestreRef.child('dados1').once('value').then(function (snapshot) {
+                        dados1Value = parseFloat(snapshot.val());
+                        console.log('Dados1:', dados1Value);
+                    });
+
+                    mestreRef.child('dados2').once('value').then(function (snapshot) {
+                        dados2Value = parseFloat(snapshot.val());
+                        console.log('Dados2:', dados2Value);
+                    });
+                }
+
+                fetchDataFromFirebase();
+
+                let map, routingControl, markerEmpresa, markerCliente, labelEmpresa, labelCliente;
+
+                var empresaLatitude = -23.550520;
+                var empresaLongitude = -46.633308;
+
+                function func() {
+                    empresaLatitude = dados1Value;
+                    empresaLongitude = dados2Value;
+                    traceRoute();
+                }
+
+                setInterval(func, 1000);
+
+                var clienteLatitude = -23.550520;
+                var clienteLongitude = -42.633308;
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    clienteLatitude = position.coords.latitude;
+                    clienteLongitude = position.coords.longitude;
+                }, function (error) {
+                });
+
+                function initMap() {
+                    if (!map) {
+                        map = L.map('map').setView([-23.550520, -46.633308], 12);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: false
+                        }).addTo(map);
+
+                        map.attributionControl.setPrefix('');
+
+                        labelEmpresa = L.divIcon({
+                            className: 'label',
+                            html: 'Local da Empresa'
+                        });
+                        labelCliente = L.divIcon({
+                            className: 'label',
+                            html: 'Local do Cliente'
+                        });
+                        markerEmpresa = L.marker([empresaLatitude, empresaLongitude], {
+                            icon: L.divIcon({
+                                className: 'custom-marker-icon custom-marker-empresa',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 30],
+                                html: '<img src="moto redire.png" width="30" height="30" />'
+                            })
+                        }).addTo(map);
+
+                        markerCliente = L.marker([clienteLatitude, clienteLongitude], {
+                            icon: L.divIcon({
+                                className: 'custom-marker-icon custom-marker-cliente',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 30],
+                                html: '<img src="imgCasapequena.png" width="30" height="30" />'
+                            })
+                        }).addTo(map);
+
+                        markerEmpresa.bindTooltip("Local da Empresa 🍔", {
+                            permanent: true,
+                            direction: 'top',
+                            className: 'label',
+                            offset: [0, -30]
+                        }).openTooltip();
+                        markerCliente.bindTooltip("Local do Cliente 🙋‍♀️", {
+                            permanent: true,
+                            direction: 'top',
+                            className: 'label',
+                            offset: [0, -30]
+                        }).openTooltip();
+
+                        routingControl = L.Routing.control({
+                            waypoints: [
+                                L.latLng(empresaLatitude, empresaLongitude),
+                                L.latLng(clienteLatitude, clienteLongitude)
+                            ],
+                            show: false
+                        }).addTo(map);
+
+                        traceRoute();
+                    }
+                }
+
+                function openModal() {
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "flex";
+                    initMap();
+                    setInterval(fetchDataFromFirebase, 10000);
+                }
+
+                function closeModal() {
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "none";
+                }
+
+                function locateCompany() {
+                    if (markerEmpresa) {
+                        map.setView(markerEmpresa.getLatLng(), 15);
+                    }
+                }
+
+                function locateClient() {
+                    if (markerCliente) {
+                        map.setView(markerCliente.getLatLng(), 15);
+                    }
+                }
+
+                function traceRoute() {
+                    const startCoords = [empresaLatitude, empresaLongitude];
+                    const endCoords = [clienteLatitude, clienteLongitude];
+
+                    if (routingControl) {
+                        map.removeControl(routingControl);
+                    }
+
+                    if (markerEmpresa) {
+                        map.removeLayer(markerEmpresa);
+                    }
+                    if (markerCliente) {
+                        map.removeLayer(markerCliente);
+                    }
+
+                    if (labelEmpresa) {
+                        map.removeLayer(labelEmpresa);
+                    }
+                    if (labelCliente) {
+                        map.removeLayer(labelCliente);
+                    }
+
+                    removeRoutingMarkers();
+
+                    markerEmpresa = L.marker([startCoords[0], startCoords[1]], {
+                        icon: L.divIcon({
+                            className: 'custom-marker-icon custom-marker-empresa',
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                            html: '<img src="moto redire.png" width="30" height="30" />'
+                        })
+                    }).addTo(map);
+
+                    markerCliente = L.marker([endCoords[0], endCoords[1]], {
+                        icon: L.divIcon({
+                            className: 'custom-marker-icon custom-marker-cliente',
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                            html: '<img src="imgCasapequena.png" width="30" height="30" />'
+                        })
+                    }).addTo(map);
+
+                    labelEmpresa = L.divIcon({
+                        className: 'label',
+                        html: 'Local da Empresa'
+                    });
+                    labelCliente = L.divIcon({
+                        className: 'label',
+                        html: 'Local do Cliente'
+                    });
+                    markerEmpresa.bindTooltip("Local da Empresa 🍔", {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'label',
+                        offset: [0, -30]
+                    }).openTooltip();
+                    markerCliente.bindTooltip("Local do Cliente 🙋‍♀️", {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'label',
+                        offset: [0, -30]
+                    }).openTooltip();
+
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(startCoords[0], startCoords[1]),
+                            L.latLng(endCoords[0], endCoords[1])
+                        ],
+                        show: false,
+                        routeWhileDragging: true
+                    }).addTo(map);
+
+                    routingControl.on('routesfound', function (e) {
+                        var routes = e.routes;
+                        var summary = routes[0].summary;
+                        var distanceInKm = (summary.totalDistance / 1000).toFixed(2);
+
+                        document.getElementById('distance-info').innerHTML = 'Distância do percurso: ' + distanceInKm + ' km';
+                    });
+                }
+
+                function removeRoutingMarkers() {
+                    const routingMarkers = document.getElementsByClassName("leaflet-marker-icon");
+                    while (routingMarkers[0]) {
+                        routingMarkers[0].parentNode.removeChild(routingMarkers[0]);
+                    }
+                }
+            </script>
+            <button onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="FinalizarPedido.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padaria Caseira</title>
+</head>
+<body onload="init_map()">
+    <header id="corpotitulo">
+    <div><h2 style="background-color: aliceblue; border-radius: 9px; text-align: center; margin-left: 40px; padding: 1px;">Voltar ◀️</h2>
+        <h2 style="background-color: aliceblue; border-radius: 11px; text-align: center; margin-left: 40px; padding: 1px;">Duvida ❓</h2></div>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; color:rgba(0, 0, 0, 0.692); background: url('_food.gif') repeat top 27px left 0px; background-size:100% 100%; border-radius: 20px; height: 100px;"><p style="font-family: 'lis'; font-size: 60pt;">Finalizar Pedido</p></div>
+<div style="display:flex; flex-direction:row; border: 1px rgb(255, 255, 255) solid; padding: 5px; border-radius: 8px; margin-right: 30px;">
+<div style="display: flex; flex-direction: column;">
+<p style="color:white; font-size: 11pt; margin-top: 0px; margin-bottom: 0px; margin-left: 5px;">Carrinho de Compra</p>
+<img style="width:120px; height: 86px;  margin-left: 5px;" src="carrinhoDeCompra.png">
+</div>
+<div style="width: 400px; height:100px; background: white; margin-left: 20px; border-radius: 10px;">
+</div ></div></header><section class="corpo">
+    <div style="margin-left: 30px;" class="bloco1">
+<div style="background: url('giphy.gif'); background-size: 110% 110%; width: 175px; height: 65px; margin-top: 10px;
+display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 20px;"><h2 style="font-family: lob; font-size: 50px; color: rgb(50, 50, 50); margin-top: 35px;">Entrega</h2></div>
+    <div style="border-radius: 15px; overflow: hidden; display:flex; flex-direction:row; justify-content: space-between; background: yellow; width: 500px; height: 190px; margin-top: 10px; ">
+        <img style="width:200px; height:170px;" src="gps gif.gif">
+        <h4 style="margin-left: 5px; font-family: sans-serif; font-size: 9pt; margin-top: 4px;" >Prezado cliente, gostaríamos de informar que nosso site oferece a conveniência da tecnologia GPS para otimizar o processo de entrega do seu lanche. Para desfrutar dessa funcionalidade, solicitamos que informe o número da sua residência e autorize o rastreamento do seu dispositivo. É importante ressaltar que o uso do GPS é opcional; caso prefira, você pode informar seu endereço indicando o bairro, rua e número da casa. Se desejar retirar o lanche na sede da empresa, por favor, acesse a seção "Buscar Lanche" e preencha o campo correspondente. Estamos comprometidos em proporcionar a melhor experiência possível, adaptando nossos serviços às suas preferências.</h4></div>
+    <div style="border-radius: 15px; overflow: hidden; display:flex; flex-direction:column; justify-content: flex-start; align-items: center; background: rgb(28, 135, 242); width: 500px; height: auto; border:1px black solid; margin-top: 10px;"><div style=" display:flex; flex-direction:row; justify-content: center; align-items: center; background: url('gpsproxi.gif'); border-radius: 20px; height: 65px; white-space: nowrap; width: 290px; margin-top: 10px;"><p style="color:blue; font-family: lis; font-size: 27pt; margin-left: 20px; margin-right: -20px;"><strong>TECNOLOGIA DE GPS</strong></p><img style="margin-left: 0px;" src="ipbsf.gif" width="100px"></div>
+    <div style="background: rgba(0, 0, 0, 0.692); margin-top: 20px; width: 93%; border-radius: 20px; height: 50px;"><p style="margin-top: 4px; color:white; text-align: center;">Caro cliente, se você deseja que a entrega seja feita através do GPS, ative a opção 'Entrega por GPS' e informe o número da sua residência.</p></div>
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 69%;border-radius: 4px; margin-top: 10px; margin-bottom: 0px;background: whitesmoke; height: 30px;"> <p style="margin-left: 10px; color: rgb(70, 71, 72);"><strong>Entrega por GPS</strong> <input type="checkbox" checked></p><p style="margin-right: 10px; color: rgb(70, 71, 72);"><strong>Número da Casa:</strong> <input style="width: 30px; border-radius: 6px; border: 1px rgba(0, 0, 0, 0.401) solid;" type="text" value="2732"></p></div>
+<p style="margin-top: 20px; margin-bottom: 4px; border-radius: 5px; background: wheat; ">Abaixo você pode observar a atual localização da nossa empresa.🏢</p>
+    <div style="margin-top: 0px; margin-bottom: -40px; width: 90%;margin-top: 0px; overflow: hidden; border-radius: 10px;">
+        <script src='http://maps.google.com/maps/api/js?key=AIzaSyDv7YRz1WWPhkr6aim8wEm4WDPBdk81z54'></script>
+    <div style='overflow:hidden;height:290px;width:100%;color: #0095eb'>
+        <div id='gmap_canvas' style='height:80%;width:100%;'></div>
+         <style>#gmap_canvas img{max-width:none!important;background:none!important}.gm-ui-hover-effect{
+        display: none!important;}</style>
+       </div>
+               <script type='text/javascript'>
+            function init_map(){var myOptions = {zoom:13,center:new google.maps.LatLng(-23.798490,-48.596936),mapTypeId: google.maps.MapTypeId.ROADMAP};map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(-23.798490,-48.596936)});infowindow = new google.maps.InfoWindow({content:'<strong> MINHA EMPRESA </strong><br> MEU ENDEREÇO <br>'});google.maps.event.addListener(marker, 'click', function(){infowindow.open(map,marker);});infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);
+            </script></div></div>        
+<div style="border-radius: 15px; overflow: hidden; display:flex; flex-direction:column; justify-content: flex-start; align-items: center; background: rgb(28, 135, 242); width: 500px; height: 260px; border:1px black solid; margin-top: 10px;">
+    <div style="overflow: hidden; display:flex; flex-direction:row; justify-content: space-between; align-items: center; background: url('gpsproxi.gif'); border-radius: 20px; height: 45px; white-space: nowrap; width: 315px; margin-top: 10px; margin-bottom: 0px;"><p style="color:blue; font-family: lis; font-size: 27pt; margin-left: 20px; margin-right: -20px;"><strong>Informar endereço</strong></p><img style="margin-left: 0px;  width:65px; height: 70px;" src="Food Delivery.gif"></div>
+<p style="width:90%; margin-top: 8px; margin-bottom: 0px; border-radius: 20px; padding: 5px; text-align: center; background: rgba(0, 0, 0, 0.692); color: azure;">Neste local você pode adicionar a sua localização manualmente sem ser rastreado, basta preencher os campos de Barrio, rua e número da residência.</p>
+<div style="background: whitesmoke; height: 100px; margin-top: 8px; margin-bottom: 10px; padding: 5px; border-radius: 8px;">
+    <p style="margin-left: 10px; margin-top: 5px; margin-bottom: 0px; color: rgb(70, 71, 72);"><strong>Barrio que você mora: </strong><input type="text" list="listaba" placeholder="Ex: Vila Sene"></p>
+    <datalist id="listaba">
+        <option>Além Linha</option><option>Bairro do Fundão</option><option>Bairro do Matão</option><option>Bairro dos Costas</option>
+        <option>Bairro Laranja Azeda</option><option>Bairro Nova Esperança</option><option>Bairro Paiquerê</option>
+        <option>Capelinha</option><option>Centro</option><option>Chapéu</option><option>Chapéuzinho</option>
+        <option>Fracalanza</option><option>Fundão</option><option>Fundão_754</option><option>Jardim Brasil</option>
+        <option>Jardim Domingues</option><option>Nosso Teto</option><option>Porto Velho</option><option>São João</option>
+        <option>Soares</option><option>Vila Marculina</option><option>Vila Rosa</option><option>Vila Saraiva</option>
+        <option>Vila São José</option><option>Vila Sene</option></datalist>
+       <p style="margin-left: 10px;margin-top: 5px; margin-bottom: 0px; color: rgb(70, 71, 72);"><strong>rua que você mora: </strong><input style="margin-left: 22px;" type="text" list="listaru" placeholder="Ex: Vila Sene"></p><datalist id="listaru">
+        <option>Rua 15 de Novembro</option><option>Rua 21 de Abril</option><option>Rua 24 de Outubro</option>
+        <option>Rua 25 de Janeiro</option><option>Rua 4</option><option>Rua 7 de Setembro</option><option>Rua Acácio Piedade</option>
+        <option>Rua Acre</option><option>Rua Adelino de Freitas</option><option>Rua Ademir Marinho</option><option>Rua Adhemar de Barros</option>
+        <option>Rua Agenor Antunes Nogueira</option><option>Rua Alagoas</option><option>Rua Alfredo F. Oliveira</option>
+        <option>Rua Alipio Nunes de Barros</option><option>Rua Alvaro Silva</option><option>Rua Amazonas</option>
+        <option>Rua Ana de Almeida</option><option>Rua Angatuba</option><option>Rua Antônio Almeida</option>
+        <option>Rua Antônio Campolim de Almeida</option><option>Rua Antônio Felipe</option><option>Rua Antônio Galvão dos Santos</option>
+        <option>Rua Antônio Martins Figueiredo</option><option>Rua Antônio Menino</option><option>Rua Antônio Pavoni</option>
+        <option>Rua Antônio Silva Lima Verde</option><option>Rua Armando Pezzoni</option><option>Rua Augusto Polifemi</option>
+        <option>Rua Avelino Coelho</option><option>Rua Bahia</option><option>Rua Bandeirantes</option><option>Rua Bartolomeu Dulce</option>
+        <option>Rua Bebe de Camargo</option><option>Rua Bem-Te-Vi</option><option>Rua Benedito de Oliveira</option>
+        <option>Rua Benedito Justo de Oliveira</option><option>Rua Benjamin Constant</option><option>Rua Botuvera</option>
+        <option>Rua Brasílio Ramos Firmino</option><option>Rua Canário</option><option>Rua Capão Bonito</option>
+        <option>Rua Capitão Lino</option><option>Rua Carlinho L. Proença</option><option>Rua Carlos Alberto Pereira Júnior</option>
+        <option>Rua Carlos Alberto Pereira Júnior</option><option>Rua Carmelita</option><option>Rua Carolina Ferreira de Albuquerque</option>
+        <option>Rua Cegonha</option><option>Rua Ciro de Albuquerque</option><option>Rua Claro Ferreira dos Santos</option>
+        <option>Rua Claudio Chaudar</option><option>Rua Coronel Angelo Guazzeli</option>
+        <option>Rua Coronel Licinio</option><option>Rua Coronel Vidal Campolim Almeida</option><option>Rua Cotovia</option>
+        <option>Rua das Acácias</option><option>Rua das Azaleias</option><option>Rua das Camélias</option>
+        <option>Rua das Dálias</option><option>Rua das Hortências</option><option>Rua das Margaridas</option>
+        <option>Rua Delfino Fonseca</option><option>Rua Delfino Nunes Fonseca</option><option>Rua Dezesseis de Julho</option>
+        <option>Rua Didi Nogueira</option><option>Rua Diogenes M Prates</option><option>Rua Domingos Marconi</option>
+        <option>Rua dos Expedicionários</option><option>Rua dos Ipês</option><option>Rua dos Jasmins</option>
+        <option>Rua dos Manacás</option><option>Rua Doutor Guimarães</option><option>Rua Edinir Mariano Simão</option>
+        <option>Rua Edmundo Pezzoni</option><option>Rua Edmur Simão</option><option>Rua Eduardo Antunes Vieira</option>
+        <option>Rua Emídio Nunes</option><option>Rua Ernesto Comeron</option><option>Rua Felipe Nicolau Adum</option>
+        <option>Rua Florentino Pereira</option><option>Rua Floriza Lopes de Freitas</option><option>Rua Fortunato Abrami</option>
+        <option>Rua Fortunato L. de Freitas</option><option>Rua Fortunato L. Ferreira de Albuquerque</option>
+        <option>Rua Fortunato Lopes Ferreira</option><option>Rua Francisco Lorena</option><option>Rua Francisco Moraes</option>
+        <option>Rua Francisco Pires</option><option>Rua Frauzino Antunes</option><option>Rua Fritz Shoenholtz</option>
+        <option>Rua Gaivota</option><option>Rua Garça</option><option>Rua Garibaldi Martinelli</option><option>Rua Geraldino Paiva</option>
+        <option>Rua Goiás</option><option>Rua Humberto Abrami</option><option>Rua Humberto Abrani</option>
+        <option>Rua Ignacio Lopes</option><option>Rua Inácio Lopes</option><option>Rua Inácio Xavier Luiz</option>
+        <option>Rua Iolanda Antunes Diogo de Arauj</option><option>Rua Itapetininga</option><option>Rua Itapeva</option>
+        <option>Rua Jaime Tavares Duarte</option><option>Rua Jarbas Cafundo</option><option>Rua Júlio Prestes</option>
+        <option>Rua Joanna M. Antunes</option><option>Rua Joaquim Antunes de Moraes</option><option>Rua Joaquim de Oliveira</option>
+        <option>Rua Joaquim Fonseca</option><option>Rua Joaquim Nunes</option><option>Rua Joaquim V Antonio</option>
+        <option>Rua João Batista Pereira Camargo</option><option>Rua João Braz de Camargo</option><option>Rua João Francisco Bueno</option>
+        <option>Rua João Francisco Bueno</option><option>Rua João Rogério de Freitas</option><option>Rua João Simões de Medeiros</option>
+        <option>Rua João Zilocchi</option><option>Rua José Alcides P. Campos</option><option>Rua José Antônio Soares</option>
+        <option>Rua José B. de Albuquerque</option><option>Rua José Cardoso</option><option>Rua José Crescêncio</option>
+        <option>Rua José da Silva Saraiva</option><option>Rua José Eduardo Graber</option><option>Rua José Gonçalves de Albuquerque</option>
+        <option>Rua José Lucas de Almeida</option><option>Rua José Marcio Campos</option><option>Rua José Marques da Silva</option>
+        <option>Rua José Philadelfo de Freitas</option><option>Rua José Pieroni</option><option>Rua José Policarpo</option>
+        <option>Rua José Ribeiro de Oliveira</option><option>Rua José Ribeiro Sobrinho</option><option>Rua José Santocci</option>
+        <option>Rua José Sobrinho</option><option>Rua José V Martins</option><option>Rua José Vieira Martins</option>
+        <option>Rua Jovino Moreira Antunes</option><option>Rua Juca Luiz</option><option>Rua Jurandir Pereira Camargo</option>
+        <option>Rua Leonor Mendes de Barros</option><option>Rua Licinio Aires de Camargo</option><option>Rua Lindolfo S de Proenca</option>
+        <option>Rua Magdalena de Oliveira</option><option>Rua Manoel A Pereira</option><option>Rua Manoel Cação</option>
+        <option>Rua Manoel Souto</option><option>Rua Manoel Vieira dos Santos</option><option>Rua Marcelo Comeron</option>
+        <option>Rua Marcos Fernando Spaluto</option><option>Rua Maria de Almeida</option><option>Rua Maria de Almeida Alves</option>
+        <option>Rua Maria de Lourdes Albuquerque Pieroni</option><option>Rua Maria G. Albuquerque</option>
+        <option>Rua Maria José Margarido Fonseca</option><option>Rua Maria Jose Margarido Fonseca</option>
+        <option>Rua Maria Pereira Silva</option><option>Rua Maria Vieira</option><option>Rua Marici Almeida Alves</option>
+        <option>Rua Maritaca</option><option>Rua Mato Grosso</option><option>Rua Minas Gerais</option><option>Rua Nelo Santucci</option>
+        <option>Rua Nelson Cezar Arato</option><option>Rua Olímpio Nogueira</option><option>Rua Olegário G. Albuquerque</option>
+        <option>Rua Orozimbo de Almeida Silva</option><option>Rua Oswaldo Reichiert</option><option>Rua Padre Anchieta</option>
+        <option>Rua Paranapanema</option><option>Rua Paraná</option><option>Rua Pardal</option>
+        <option>Rua Pedro Domingues de Oliveira</option><option>Rua Pedro Tristão de Almeida</option><option>Rua Periquito</option>
+        <option>Rua Primavera</option><option>Rua Primeiro de Maio</option><option>Rua Progresso</option><option>Rua Projetada</option>
+        <option>Rua Prudente de Morais</option><option>Rua Regente Feijó</option><option>Rua Rio de Janeiro</option>
+        <option>Rua Rio Grande do Sul</option><option>Rua Romeu Jacob Silveira</option><option>Rua Rosalina Vieira Machado</option>
+        <option>Rua Rubens Pereira</option><option>Rua Ruy Barbosa</option><option>Rua Sabiá</option><option>Rua Salvador Ivo Martins Guimarães</option>
+        <option>Rua Salvador Nunes</option><option>Rua Santa Catarina</option><option>Rua Santos Dumont</option>
+        <option>Rua Sargento Antonio Ponce</option><option>Rua São Paulo</option><option>Rua São Roque</option>
+        <option>Rua Sete</option><option>Rua Sizenando Moreira Antunes</option><option>Rua Teddy Vieira de Azevedo</option>
+        <option>Rua Tico Tico</option><option>Rua Tomaz de Souza</option><option>Rua Tucano</option><option>Rua Uirapuru</option>
+        <option>Rua Valdecir Antônio da Silva</option><option>Rua Vando Lopes de Oliveira</option><option>Rua Vereador José R. Sobrinho</option>
+        <option>Rua Vereador Valdemar Lopes de Oliveira</option><option>Rua Zilda Maria M Rodrigues</option></datalist>
+       <p style="margin-left: 10px;margin-top: 5px; margin-bottom: 0px; color: rgb(70, 71, 72);"><strong>Número da Casa: </strong><input style="width: 44px; margin-left: 35px;" size="6" type="text"  placeholder="N°casa"></p>
+       <p style="margin-left: 10px;margin-top: 5px; color: rgb(70, 71, 72);"><strong>Informar localização:</strong><input type="checkbox"></p>  
+   
+    </div>
+
+</div>
+<div style="border-radius: 15px; overflow: hidden; display:flex; flex-direction:column; justify-content: flex-start; align-items: center; background: rgb(28, 135, 242); width: 320px; height: 120px; border:1px black solid; margin-top: 10px;">
+<div style=" display:flex; flex-direction:row; justify-content: center; align-items: center; background: url('gpsproxi.gif'); border-radius: 10px; height: 65px; white-space: nowrap; width: 290px; margin-top: 10px;"><p style="color:blue; font-family: lis; font-size: 27pt; margin-left: 9px; margin-right: -20px;"><strong>Retirar o Lanche</strong></p><img style="margin-left: 0px; margin-right: 0px;" src="DPS-unscreen.gif"  width="100px"></div>
+<p style="background: rgba(0, 0, 0, 0.692); color: azure; padding: 2px; border-radius: 7px;">Eu vou buscar o meu lanche na sde<input type="checkbox"></p>
+</div>
+
+    </div>
+    
+    <div style="margin-right: 30px;" class="bloco2">
+    <div style="display: flex; flex-direction: column; justify-content: center;align-items: center; height:49px; margin-top: 10px; background: linear-gradient(to right top, rgb(238, 255, 0), rgb(0, 255, 140)); padding: 5px; border-radius: 9px;"><h2 style="text-align: center; font-family: lob; font-size: 50px; color: rgb(50, 50, 50); margin-top: 35px;">Conclusão do Pedido</h2></div>
+<article style="overflow: hidden; display: flex; flex-direction: row; justify-content: space-between; background-color: yellow; margin-top: 10px; width: 80%; height: 200px; border-radius: 20px;">
+<img src="pernalonga.gif" width="200px">
+<p style="font-family: sans-serif; margin-top: 0px; font-size: 11.1pt; margin-left: 2px;"><strong>Prezado cliente, agora ficou ainda mais fácil efetuar o pagamento do seu lanche. Você pode escolher entre duas opções: utilizar o QR Code (PIX) ou efetuar o pagamento no momento da entrega. Para concluir o pagamento via QR Code, basta clicar na opção 'Usar pagamento por PIX'. Se preferir pagar na entrega, clique em 'Eu vou pagar o lanche na entrega'. Agradecemos pela sua preferência!</strong></p>
+</article>
+<div  style="height: 280px;" class="pgdbp">
+<div style="width: 200px; height: 100%; background: whitesmoke; display: flex; flex-direction: column; align-items: center;">
+<img style="margin-top: 5px; margin-bottom: 5px;"src="px.png" width="180px">
+    <img src="QR.png" width="200px">
+</div>
+<div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+<p style="font-size: 16pt; margin-bottom: 0px; background: rgba(0, 0, 0, 0.692);  margin-top: 0px; color: rgb(255, 255, 255);text-align: center;"><strong>Optar cuidadosamente pelo método de pagamento a ser utilizado para a aquisição do produto, considerando as diversas opções disponíveis.</strong></p>
+<div style="display: flex; flex-direction: row; border-radius: 9px; margin-top: 3px;overflow: hidden; background: rgb(249, 212, 212); width: 80%; height: 75px;">
+    <div style="width: 200px; border-right: 2px black solid;">
+    <p style="margin-left: 10px; margin-top: 0px; margin-bottom: 0px;">Pagar no pix<input type="checkbox"></p>
+    <p style="margin-left: 10px; margin-top: 5px; margin-bottom: 0px;">Pagar na entrega<input type="checkbox"></p>
+    <p style="margin-left: 10px;margin-top: 5px; ">Você precisa de troco?<input style="width: 27px; margin-left: 5px;" type="text" value="6,25"></p>
+</div>
+<div style=" width: 25%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <p style="text-align: center; font-size: 11px; margin-bottom: -5px; font-family: sans-serif;"><strong >Copiar chave PIX</strong></p>
+<img style="margin-bottom: 7px;" src="copiar.png" width="60px">
+</div>
+</div>
+<div style="width: 100%; height: 88px; margin-top: 0px; margin-bottom: 0px; background: url('money-cash.gif'); background-size: 100% 100%;">-</div>
+</div>
+</div>
+<p style="background: rgba(0, 0, 0, 0.692); color: aliceblue; text-align: center; width: 90%; border-radius: 7px; font-size: 14px;">
+    Prezado cliente, uma vez que todos os parâmetros forem devidamente preenchidos, solicitamos que clique no botão 'Finalizar pedido'. Após a conclusão desse processo, uma mensagem será exibida na tela, solicitando o número do seu celular. Ao inserir o seu número e clicar em 'Ok', você será redirecionado para uma página que apresenta um jogo, além da <span style="color: red;">localização em tempo real do motoboy. No caso de escolher retirar o lanche, será exibida uma rota traçada da sua localização até a sede da empresa</span>.
+</p>
+<button onclick="c()" id="botsub">Finalizar Pedido</button>
+<script> function c(){open("teste3.htm", "_self")} </script>
+    </div>
+    </section>
+</body>
+</html>

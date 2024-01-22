@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+           background: url("stuv.jpg");
+           background-size: 50% 50%;
+                 padding: 20px;
+            border-radius: 15px;
+            width: 600px;
+        }
+
+        .button {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 6px;
+
+        }
+
+        /* Esconde o ícone padrão da Leaflet e remove a sombra */
+        .leaflet-marker-icon-default,
+        .leaflet-marker-icon {
+            display: none !important;
+        }
+
+        /* Define uma classe específica para os marcadores personalizados */
+        .custom-marker-icon {
+            width: 30px;
+            height: 30px;
+            
+            display: block !important; /* Garante que a imagem seja exibida */
+        }
+
+        /* Remove a sombra específica associada aos marcadores */
+        .leaflet-shadow-pane {
+            display: none !important;
+        }
+
+        /* Esconde a caixa de instruções de rota */
+        .leaflet-routing-container,
+        .leaflet-routing-container-hide {
+            display: none !important;
+        }
+
+        /* Estilos para os botões */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            border-radius: 5px;
+
+        }
+
+        /* Estilos para os rótulos */
+        .label {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            z-index: 1000;
+            pointer-events: none;
+            
+        }
+
+        /* Estilos para a div de informações de distância */
+        #superi{
+            display: flex;
+            width: auto;
+            flex-direction: column;
+            align-items: center;
+        }
+        #distance-info {
+            margin-top: 10px;
+            font-weight: bold;
+            background-color: rgb(255, 255, 255);
+            display: flex;
+            width: 250px;
+            border-radius: 6px;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-database.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("backjogovelha.jpg");
+
+        }
+        #t{
+          display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: red;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: white;
+        }
+
+        td {
+          
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 34px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .winner {
+            background-color: #8aff8a; /* Cor de fundo para destacar a vitória */
+        }
+
+        .message {
+            text-align: center;
+            font-size: 28px;
+            margin-top: 20px;
+            background: white;
+            width: 200px;
+            text-align: center;
+            border-radius: 8px; overflow: hidden;
+        }
+        
+    </style>
+    <title>Jogo da Velha</title>
+</head>
+<body>
+  <div id="t">
+    <button onclick="f()" style="margin-top: 8px;">Voltar para a página inicial</button>
+    <script> function f(){open("index.htm","_self")}</script>
+    <button style="margin-top: 5px;" onclick="openModal()">Rastreiar motoboy</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div id="map"></div>
+
+            <div class="button-container">
+                <button onclick="locateCompany()">Localização da Empresa🍔</button>
+                <button onclick="locateClient()">Localização do Cliente🙋‍♀️</button>
+            </div>
+
+            <!-- Elemento para exibir a distância do percurso -->
+            <div id="superi">
+            <div id="distance-info"></div>
+        </div>
+            <script>
+                var firebaseConfig = {
+                    databaseURL: "https://pastelaria-3b4de-default-rtdb.firebaseio.com/",
+                    apiKey: "AIzaSyCWyGbRlDZkbTzvmRqSeFJ7AzZumbV_Uko",
+                    authDomain: "pastelaria-3b4de.firebaseapp.com",
+                    projectId: "pastelaria-3b4de",
+                    storageBucket: "pastelaria-3b4de.appspot.com",
+                    messagingSenderId: "162634624762",
+                    appId: "1:162634624762:web:fb7b30e70c272663692343",
+                    measurementId: "G-67554V847G"
+                };
+
+                firebase.initializeApp(firebaseConfig);
+
+                var mestreRef = firebase.database().ref('mestre');
+                let dados1Value = 0, dados2Value = 0;
+
+                function fetchDataFromFirebase() {
+                    mestreRef.child('dados1').once('value').then(function (snapshot) {
+                        dados1Value = parseFloat(snapshot.val());
+                        console.log('Dados1:', dados1Value);
+                    });
+
+                    mestreRef.child('dados2').once('value').then(function (snapshot) {
+                        dados2Value = parseFloat(snapshot.val());
+                        console.log('Dados2:', dados2Value);
+                    });
+                }
+
+                fetchDataFromFirebase();
+
+                let map, routingControl, markerEmpresa, markerCliente, labelEmpresa, labelCliente;
+
+                var empresaLatitude = -23.798452;
+                var empresaLongitude = -48.596907;
+
+                function func() {
+                    empresaLatitude = dados1Value;
+                    empresaLongitude = dados2Value;
+                    traceRoute();
+                }
+
+                setInterval(func, 750);
+
+                var clienteLatitude = -23.798452;
+                var clienteLongitude = -48.596907;
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    clienteLatitude = position.coords.latitude;
+                    clienteLongitude = position.coords.longitude;
+                }, function (error) {
+                });
+
+                function initMap() {
+                    if (!map) {
+                        map = L.map('map').setView([-23.798452, -48.596907], 12);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: false
+                        }).addTo(map);
+
+                        map.attributionControl.setPrefix('');
+
+                        labelEmpresa = L.divIcon({
+                            className: 'label',
+                            html: 'Local da Empresa'
+                        });
+                        labelCliente = L.divIcon({
+                            className: 'label',
+                            html: 'Local do Cliente'
+                        });
+                        markerEmpresa = L.marker([empresaLatitude, empresaLongitude], {
+                            icon: L.divIcon({
+                                className: 'custom-marker-icon custom-marker-empresa',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 30],
+                                html: '<img src="moto redire.png" width="30" height="30" />'
+                            })
+                        }).addTo(map);
+
+                        markerCliente = L.marker([clienteLatitude, clienteLongitude], {
+                            icon: L.divIcon({
+                                className: 'custom-marker-icon custom-marker-cliente',
+                                iconSize: [30, 30],
+                                iconAnchor: [15, 30],
+                                html: '<img src="imgCasapequena.png" width="30" height="30" />'
+                            })
+                        }).addTo(map);
+
+                        markerEmpresa.bindTooltip("Local da Empresa 🍔", {
+                            permanent: true,
+                            direction: 'top',
+                            className: 'label',
+                            offset: [0, -30]
+                        }).openTooltip();
+                        markerCliente.bindTooltip("Local do Cliente 🙋‍♀️", {
+                            permanent: true,
+                            direction: 'top',
+                            className: 'label',
+                            offset: [0, -30]
+                        }).openTooltip();
+
+                        routingControl = L.Routing.control({
+                            waypoints: [
+                                L.latLng(empresaLatitude, empresaLongitude),
+                                L.latLng(clienteLatitude, clienteLongitude)
+                            ],
+                            show: false
+                        }).addTo(map);
+
+                        traceRoute();
+                    }
+                }
+
+                function openModal() {
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "flex";
+                    initMap();
+                    setInterval(fetchDataFromFirebase, 2000);
+                }
+
+                function closeModal() {
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "none";
+                }
+
+                function locateCompany() {
+                    if (markerEmpresa) {
+                        map.setView(markerEmpresa.getLatLng(), 15);
+                    }
+                }
+
+                function locateClient() {
+                    if (markerCliente) {
+                        map.setView(markerCliente.getLatLng(), 15);
+                    }
+                }
+
+                function traceRoute() {
+                    const startCoords = [empresaLatitude, empresaLongitude];
+                    const endCoords = [clienteLatitude, clienteLongitude];
+
+                    if (routingControl) {
+                        map.removeControl(routingControl);
+                    }
+
+                    if (markerEmpresa) {
+                        map.removeLayer(markerEmpresa);
+                    }
+                    if (markerCliente) {
+                        map.removeLayer(markerCliente);
+                    }
+
+                    if (labelEmpresa) {
+                        map.removeLayer(labelEmpresa);
+                    }
+                    if (labelCliente) {
+                        map.removeLayer(labelCliente);
+                    }
+
+                    removeRoutingMarkers();
+
+                    markerEmpresa = L.marker([startCoords[0], startCoords[1]], {
+                        icon: L.divIcon({
+                            className: 'custom-marker-icon custom-marker-empresa',
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                            html: '<img src="moto redire.png" width="30" height="30" />'
+                        })
+                    }).addTo(map);
+
+                    markerCliente = L.marker([endCoords[0], endCoords[1]], {
+                        icon: L.divIcon({
+                            className: 'custom-marker-icon custom-marker-cliente',
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                            html: '<img src="imgCasapequena.png" width="30" height="30" />'
+                        })
+                    }).addTo(map);
+
+                    labelEmpresa = L.divIcon({
+                        className: 'label',
+                        html: 'Local da Empresa'
+                    });
+                    labelCliente = L.divIcon({
+                        className: 'label',
+                        html: 'Local do Cliente'
+                    });
+                    markerEmpresa.bindTooltip("Local da Empresa 🍔", {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'label',
+                        offset: [0, -30]
+                    }).openTooltip();
+                    markerCliente.bindTooltip("Local do Cliente 🙋‍♀️", {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'label',
+                        offset: [0, -30]
+                    }).openTooltip();
+
+                    routingControl = L.Routing.control({
+                        waypoints: [
+                            L.latLng(startCoords[0], startCoords[1]),
+                            L.latLng(endCoords[0], endCoords[1])
+                        ],
+                        show: false,
+                        routeWhileDragging: true
+                    }).addTo(map);
+
+                    routingControl.on('routesfound', function (e) {
+                        var routes = e.routes;
+                        var summary = routes[0].summary;
+                        var distanceInKm = (summary.totalDistance / 1000).toFixed(2);
+
+                        document.getElementById('distance-info').innerHTML = 'Distância do percurso: ' + distanceInKm + ' km 📏';
+                    });
+                }
+
+                function removeRoutingMarkers() {
+                    const routingMarkers = document.getElementsByClassName("leaflet-marker-icon");
+                    while (routingMarkers[0]) {
+                        routingMarkers[0].parentNode.removeChild(routingMarkers[0]);
+                    }
+                }
+            </script>
+            <button onclick="closeModal()">Fechar❎</button>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <p style="margin-bottom: 0px; background: rgba(0, 0, 0, 0.5); color: aliceblue;">Use as setas ⬅️ ➡️ para trocar de jogo.</p>
+
+<div style="margin-top: 0px; display: flex; flex-direction: row; justify-content: center; align-items: center;">
+<p style="font-size: 26pt;"> ⬅️ </p><h1 style="background: white; border-radius: 8px;">Jogo da Velha</h1><p onclick="g()" style="font-size: 26pt; cursor: pointer;">➡️</p>
+<script>
+function g (){
+open("carro.html", "_self")
+}
+</script>
+</div>
+</div>
+<table id="board"></table>
+<div style=" width: 100%; display: flex; flex-direction: column; align-items: center;">
+<div class="message" id="message"></div>
+</div>
+<script>
+    const board = document.getElementById('board');
+    const message = document.getElementById('message');
+    let currentPlayer = 'X';
+    let gameBoard = ['', '', '', '', '', '', '', '', ''];
+    let gameActive = true;
+    let clickable = true;
+
+    // Função para inicializar o tabuleiro
+    function initializeBoard() {
+        for (let i = 0; i < 3; i++) {
+            const row = document.createElement('tr');
+            for (let j = 0; j < 3; j++) {
+                const cell = document.createElement('td');
+                cell.addEventListener('click', () => makeMove(i, j));
+                row.appendChild(cell);
+            }
+            board.appendChild(row);
+        }
+    }
+
+    // Função para efetuar a jogada
+    function makeMove(row, col) {
+        if (!gameActive || !clickable || gameBoard[row * 3 + col] !== '') return;
+
+        clickable = false;  // Desativar temporariamente os eventos de clique
+
+        gameBoard[row * 3 + col] = currentPlayer;
+        board.rows[row].cells[col].textContent = currentPlayer;
+
+        if (checkWin()) {
+            highlightWinnerCells();
+            message.textContent = `Você venceu!`;
+            gameActive = false;
+        } else if (checkTie()) {
+            message.textContent = 'Empate!';
+            gameActive = false;
+        } else {
+            currentPlayer = 'O';  // Agora é a vez do robô
+            message.textContent = 'É a vez da Padaria Caseira';
+            setTimeout(() => {
+                makeComputerMove();
+                clickable = true;  // Reativar os eventos de clique após a jogada do robô
+            }, 1000);  // Adiciona um pequeno atraso para simular o pensamento do robô
+        }
+    }
+
+    // Função para o robô fazer uma jogada
+    function makeComputerMove() {
+        if (!gameActive) return;
+
+        let emptyCells = gameBoard.reduce((acc, cell, index) => {
+            if (cell === '') acc.push(index);
+            return acc;
+        }, []);
+
+        let computerMove;
+
+        // Verificar se o robô pode ganhar na próxima jogada
+        computerMove = checkComputerWin();
+
+        // Se não puder ganhar, verificar se o robô pode bloquear o jogador
+        if (!computerMove) {
+            computerMove = checkBlockPlayer();
+        }
+
+        // Se ainda não houver decisão, faça um movimento aleatório
+        if (!computerMove && emptyCells.length > 0) {
+            const randomIndex = Math.floor(Math.random() * emptyCells.length);
+            computerMove = emptyCells[randomIndex];
+        }
+
+        if (computerMove !== undefined) {
+            gameBoard[computerMove] = 'O';
+            const computerRow = Math.floor(computerMove / 3);
+            const computerCol = computerMove % 3;
+            board.rows[computerRow].cells[computerCol].textContent = 'O';
+
+            if (checkWin()) {
+                highlightWinnerCells();
+                message.textContent = `A Padaria Caseira venceu! 😆`;
+                gameActive = false;
+            } else if (checkTie()) {
+                message.textContent = 'Empate!';
+                gameActive = false;
+            } else {
+                currentPlayer = 'X';  // Agora é a vez do jogador
+                message.textContent = `É a sua vez, jogador ${currentPlayer}`;
+            }
+        }
+    }
+
+    // Função para verificar se o robô pode ganhar na próxima jogada
+    function checkComputerWin() {
+        for (let i = 0; i < 9; i++) {
+            if (gameBoard[i] === '') {
+                gameBoard[i] = 'O';
+                if (checkWin()) {
+                    gameBoard[i] = '';
+                    return i;
+                }
+                gameBoard[i] = '';
+            }
+        }
+        return undefined;
+    }
+
+    // Função para verificar se o robô pode bloquear o jogador
+    function checkBlockPlayer() {
+        for (let i = 0; i < 9; i++) {
+            if (gameBoard[i] === '') {
+                gameBoard[i] = 'X';
+                if (checkWin()) {
+                    gameBoard[i] = 'O'; // Bloqueia o jogador
+                    return i;
+                }
+                gameBoard[i] = '';
+            }
+        }
+        return undefined;
+    }
+
+    // Função para verificar se há um vencedor
+    function checkWin() {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        return winPatterns.some(pattern => {
+            const [a, b, c] = pattern;
+            if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                return true;
+            }
+            return false;
+        });
+    }
+
+    // Função para verificar empate
+    function checkTie() {
+        return !gameBoard.includes('');
+    }
+
+    // Função para destacar visualmente as células vencedoras
+    function highlightWinnerCells() {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        for (const pattern of winPatterns) {
+            const [a, b, c] = pattern;
+            if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                board.rows[Math.floor(a / 3)].cells[a % 3].classList.add('winner');
+                board.rows[Math.floor(b / 3)].cells[b % 3].classList.add('winner');
+                board.rows[Math.floor(c / 3)].cells[c % 3].classList.add('winner');
+                break;
+            }
+        }
+    }
+
+    // Reiniciar o jogo
+    function resetGame() {
+    gameBoard = ['', '', '', '', '', '', '', '', ''];
+    currentPlayer = 'X';
+    gameActive = true;
+    clickable = true;  // Certifique-se de que os eventos de clique estão ativados
+
+    // Limpar o tabuleiro e redefinir estilos
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            const cell = board.rows[i].cells[j];
+            cell.textContent = '';
+            cell.classList.remove('winner');
+        }
+    }
+
+    message.textContent = `É a sua vez, jogador ${currentPlayer}`;
+
+    // Se o primeiro movimento for do robô, faça a jogada
+    if (currentPlayer === 'O') {
+        setTimeout(() => makeComputerMove(), 1000);
+    }
+}
+
+    // Inicializar o jogo
+    initializeBoard();
+    message.textContent = `É a sua vez, jogador ${currentPlayer}`;
+</script>
+<div style="margin-top: 20px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+  <button onclick="resetGame()">Reiniciar Jogo</button>
+</div>
+</body>
+</html>

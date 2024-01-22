@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<link rel="stylesheet" href="style2.css">
+    <link rel="shortcute icon" type="imagex/png" href="icone ruim transparente.webp"  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastelaria Caseira</title>
+</head>
+<body>
+<header id="tarefa1">
+    <h1 id="botãoVoltar" style="cursor:pointer;" onclick="volta()">< Voltar</h1>
+
+    <img id="logo"src="icone ruim transparente.webp">
+    <h1 id="titulo">Encomenda</h1>
+<img id="gif"src="gif.gif">
+</header>
+<section id="corpogeral">
+<section id="corpo">
+    <div class="lists"><p class="inf1top">Items do seu Pastel</p>
+    <picture id="picture1">
+        <img id="fundo1" src="">
+        <img id="fundo2" src="">
+        <img id="fundo3" src="">
+    </picture>
+    <p id="inf">Prezado cliente, você pode editar o seu pastel nas três opções abaixo.</p>
+    <p style="border-radius: 5px; padding: 2px 2px 2px 2px; background: rgba(0, 0, 0, 0.5); margin-top: 5px; margin-bottom: 1px;"><label style="color:white;">Quantidade de Pastel:         <input min="0" max="10" style="width: 33px; border-radius: 7px; height:12px; border: 1px solid black; margin-right: 0px;" class="entrabe"type="number" value="1"/>    </p>
+    <p class="inf1">1° Opção</p>
+    <select name="ps" id="ps1">
+    <option value="opcao1">Carne Moida</option>
+    <option value="opcao2">Queijo</option>
+    <option value="opcao3">Azeitona</option>
+</select>
+
+<p class="inf1">2° Opção</p>
+<select name="ps" id="ps2">
+<option value="opcao1">Carne Moida</option>
+<option value="opcao2">Queijo</option>
+<option value="opcao3">Azeitona</option>
+</select>
+
+<p class="inf1">3° Opção</p>
+<select name="ps" id="ps3">
+<option value="opcao1">Carne Moida</option>
+<option value="opcao2">Queijo</option>
+<option value="opcao3">Azeitona</option>
+</select>
+<p style="background: rgba(1, 1, 1, 0.492); border-radius: 10px; margin-top: 3px; margin-bottom: 2px; padding: 3px; color:white;">
+    <input type="checkbox" id="molhoCheckbox" checked>
+    <label for="molhoCheckbox">Pastel com molho. Desmarque se não quiser, por favor.</label>
+</p>
+<div id="pslt">
+    <div entradic1>vvergvdfv</div>
+    <div entradic2>regrsvdrg</div>
+    <div entradic3>rgergsrsge</div>
+</div>
+<script>
+    document.getElementById("molhoCheckbox").addEventListener("change", function() {
+        if (this.checked) {
+            this.setAttribute("checked", "checked");
+        } else {
+            this.removeAttribute("checked");
+        }
+    });
+</script>
+</div>
+    <div class="listd"><p class="inf1top">Items adicionais</p>
+        
+<div id="adc"><img id="be1" src="agua.png">
+    <img id="be2" src="fanta.png">
+    <img id="be3" src="Guaraná.png">
+    <img id="be4" src="tuibaina.png">
+</div>
+<p style="background: rgba(1, 1, 1, 0.483); width: 80%; padding: 5px; border-radius:10px; color:white;">Olá! Aqui você pode selecionar a bebida e esfiha desejadas e indicar a quantidade de cada uma.</p>
+<div id="boxfre">
+    <div id="sub1">
+        <h1 style="font-size: 12px; text-align: center;">Água<br>R$: 3,00</h1>
+        <input id="entradaref1" style="margin-bottom: 5px; border-bottom-left-radius: 20px; padding-left: 10px; border: 1px black solid;" class="entrabe"type="number" value="0"/>
+    </div>
+
+    <div id="sub2">
+        <h1 style="font-size: 12px; text-align: center;">Fanta<br>R$: 5,00</h1>
+        <input id="entradaref2" style="margin-bottom: 5px; padding-left: 10px; border: 1px black solid;" class="entrabe"type="number" value="0"/>
+    </div>
+
+    <div id="sub3">
+        <h1 style="font-size: 12px;text-align: center;">Guaraná<br>R$: 5,00</h1>
+        <input id="entradaref3" style=" margin-bottom: 5px;padding-left: 10px; border: 1px black solid;" class="entrabe"type="number" value="0"/>
+    </div>
+
+    <div id="sub4">
+        <h1 style="font-size: 12px;text-align: center;">Tuibaina<br>R$: 3,50</h1>
+        <input min="0" max="10" id="entradaref4"style="margin-bottom: 5px;border-bottom-right-radius: 20px; padding-right: 10px; border: 1px black solid;" class="entrabe"type="number" value="0"/>
+    </div>
+    </div>
+<div id="best">
+    <div  style="border-right:2px rgba(223, 7, 7, 0.483) solid;"id="estr1">
+        <h1 style="font-size: 15px; font-weight: 900; color: white; text-shadow: 1px 1px 1px black, -1px 1px 1px black, 1px -1px 1px black, -1px -1px 1px black;">Esfiha Carne</h1>
+        <input min="0" max="10" style="border-radius: 7px; padding-left: 10px; border: 2px solid black" class="entrabe"type="number" value="0"/>
+    </div>
+    <div style="border-right:2px rgba(1, 1, 1, 0.492) solid;" id="estr2">
+        <h1 style="font-size: 15px; font-weight: 900; color: white; text-shadow: 1px 1px 1px black, -1px 1px 1px black, 1px -1px 1px black, -1px -1px 1px black;">Esfiha Pizza</h1>
+        <input min="0" max="10" style="border-radius: 7px; padding-left: 10px; border: 2px solid black" class="entrabe"type="number" value="0"/>
+    </div>
+    <div id="estr3">
+        <h1 style="font-size: 15px; font-weight: 900; color: white; text-shadow: 1px 1px 1px black, -1px 1px 1px black, 1px -1px 1px black, -1px -1px 1px black;">Esfiha Frango</h1>
+        <input min="0" max="10" style=" border-radius: 7px;padding-left: 10px; border: 2px solid black" class="entrabe"type="number" value="0"/>
+    </div>
+</div>
+</div>
+</section>
+<script src="js2.js"></script>  
+<div style="width: 100%; display: flex; flex-direction: row; justify-content: center; padding-bottom:8px;">
+<button onclick="cofd()" style="border-radius: 8px; border: 3px red solid; cursor:pointer;">💶Realizar pagamento e entrega do produto. 🧾</button>
+</div>    
+<script>
+   function cofd(){
+window.open("FinalizarPedido.htm", "_self");
+   }
+</script>    
+</div>
+
+</section>
+</body>
+</html>
+
+
